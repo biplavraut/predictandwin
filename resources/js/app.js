@@ -125,6 +125,9 @@ import moment from 'moment'; //format date in vue
 Vue.filter('myDate', function(created) {
     return moment(created).format('Do MMMM  YYYY'); // April 7th 2019,(h:mm:ss a) 3:34:44 pm
 });
+Vue.filter('myDayDate', function(created) {
+    return moment(created).format('ddd, D-MMM-YYYY'); // April 7th 2019,(h:mm:ss a) 3:34:44 pm
+});
 
 /*Start of Custom Event Listner Vue - Fires an event after a change*/
 let Fire = new Vue();

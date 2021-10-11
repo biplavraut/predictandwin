@@ -70,10 +70,10 @@
                     :class="isActive ? 'nav-item active':'nav-item'"
                 >
                     <a :href="href" class="nav-link" @click="navigate" :title="route.fullPath"><i class="ti-pulse menu-icon"></i>
-                    <span class="menu-title">Quiz</span></a>
+                    <span class="menu-title">Predict an Win</span></a>
                 </li>
             </router-link>
-            <router-link
+            <!-- <router-link
                 :to="{name:'prediction.index'}"
                 v-slot="{ href, route, navigate, isActive }"
                 custom
@@ -84,7 +84,7 @@
                     <a :href="href" class="nav-link" @click="navigate" :title="route.fullPath"><i class="ti-thought menu-icon"></i>
                     <span class="menu-title">Prediction</span></a>
                 </li>
-            </router-link>
+            </router-link> -->
             <router-link
                 :to="{name:'ads.index'}"
                 v-slot="{ href, route, navigate, isActive }"

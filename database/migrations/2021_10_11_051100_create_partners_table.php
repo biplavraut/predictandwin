@@ -26,6 +26,7 @@ class CreatePartnersTable extends Migration
             $table->string('type')->nullable()->default('promoter');
             $table->string('address')->nullable();
             $table->string('excerpt')->nullable();
+            $table->bigInteger('order_item')->nullable();
             $table->string('created_by')->nullable();
             $table->timestamps();
             $table->string('updated_by')->nullable();

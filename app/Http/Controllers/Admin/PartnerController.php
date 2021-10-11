@@ -129,4 +129,10 @@ class PartnerController extends Controller
             return ['result' => 'error', 'message' => 'Unauthorized! Access Denied'];
         }
     }
+
+    public function selectPartner()
+    {
+        $data = Partner::select('id as value', 'business_name as text', 'slug')->where('enabled', 1)->get();
+        return response()->json(['data' => $data]);
+    }
 }

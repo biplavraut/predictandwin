@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helper\ImageCrop;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Admin\CategoryResource;
-use App\Models\Category;
+use App\Http\Resources\Admin\QuizResource;
+use App\Models\Option;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class CategoryController extends Controller
+class QuizController extends Controller
 {
     public function __construct()
     {
@@ -24,8 +25,8 @@ class CategoryController extends Controller
     {
         //
         if (\Gate::allows('canView')) {
-            $category = Category::latest()->paginate(10);
-            return CategoryResource::collection($category);
+            $data = Quiz::latest()->paginate(10);
+            return QuizResource::collection($data);
         } else {
             return ['result' => 'error', 'message' => 'Unauthorized! Access Denied'];
         }
@@ -43,17 +44,23 @@ class CategoryController extends Controller
         $this->validate($request, [
             'title' => 'required|string|max:191',
         ]);
+        if (count($request->options) <= 0) {
+            return ['result' => 'error', 'message' => 'Options Not available!'];
+        }
+        $options = $request->options;
+        $answer = $request->answer;
         $slug = Str::slug($request->title);
         if ($request->image) {
-            $image = new ImageCrop('category', $slug, $request->image);
+            $image = new ImageCrop('quiz', $slug, $request->image);
             $finalImage = $image->resizeCropImage(500, 500);
             $request->merge(['slug' => $slug, 'image' => $finalImage, 'created_by' => auth('admin')->user()->id, 'updated_by' => auth('admin')->user()->id]);
         } else {
             $request->merge(['slug' => $slug, 'image' => "no-image.png", 'created_by' => auth('admin')->user()->id, 'updated_by' => auth('admin')->user()->id]);
         }
-        $store = Category::create($request->all());
+        $store = Quiz::create($request->except(['options', 'answer']));
         if ($store) {
-            return ['result' => 'success', 'message' => 'Category added successfully! '];
+            $this->addOpton($store->id, $options, $request->answer);
+            return ['result' => 'success', 'message' => 'Quiz added successfully! '];
         } else {
             return ['result' => 'error', 'message' => 'Something went wrong!'];
         }
@@ -69,8 +76,8 @@ class CategoryController extends Controller
     {
         //
         if (\Gate::allows('canEditUser')) {
-            $category = Category::findOrFail(decrypt($id));
-            return new CategoryResource($category);
+            $data = Quiz::findOrFail(decrypt($id));
+            return new QuizResource($data);
         } else {
             return ['result' => 'error', 'message' => 'Unauthorized! Access Denied'];
         }
@@ -85,22 +92,23 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //
         $this->validate($request, [
             'title' => 'required|string|max:191',
         ]);
-        $category = Category::where('id', decrypt($id))->firstOrFail();
+        $data = Quiz::where('id', decrypt($id))->firstOrFail();
         $slug = Str::slug($request->title);
         if (base64_decode($request->image, true)) {
-            $image = new ImageCrop('category', $slug, $request->image);
+            $image = new ImageCrop('quiz', $slug, $request->image);
             $finalImage = $image->resizeCropImage(500, 500);
             $request->merge(['slug' => $slug, 'image' => $finalImage, 'updated_by' => auth('admin')->user()->id]);
-            $update = $category->update($request->all());
+            $update = $data->update($request->all());
         } else {
             $request->merge(['updated_by' => auth('admin')->user()->id]);
-            $update = $category->update($request->except(['image']));
+            $update = $data->update($request->except(['image']));
         }
         if ($update) {
-            return ['result' => 'success', 'message' => 'Category updated successfully! '];
+            return ['result' => 'success', 'message' => 'Quiz updated successfully! '];
         } else {
             return ['result' => 'error', 'message' => 'Something went wrong!'];
         }
@@ -109,32 +117,26 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $slug
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($slug)
+    public function destroy($id)
     {
         //
-        $category = Category::where('slug', $slug)->firstOrFail();
-        return $category->delete();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  string  $title
-     * @return \Illuminate\Http\Response
-     */
-    public function search($title)
-    {
         //
-        $category = Category::where('title', 'like', '%' . $title . '%')->get();
-        return $category;
+        $data = Quiz::where('id', $id)->firstOrFail();
+        return $data->delete();
     }
 
-    public function selectCategory()
+    public function addOpton($quiz_id, $options, $answer)
     {
-        $data = Category::select('id as value', 'title as text', 'slug')->where('display', 1)->get();
-        return response()->json(['data' => $data]);
+        for ($i = 0; $i < count($options); $i++) {
+            if (is_numeric($options[$i]['value'])) {
+                $is_answer = ($answer == $options[$i]['value']) ? 1 : 0;
+                Option::where('id', $options[$i]['value'])->update(['is_answer' => $is_answer]);
+            } else {
+                Option::create(['title' => $options[$i]['text'], 'quiz_id' => $quiz_id, 'is_answer' => $is_answer]);
+            }
+        }
     }
 }

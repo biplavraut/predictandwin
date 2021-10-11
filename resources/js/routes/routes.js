@@ -13,7 +13,7 @@ function resourceUrl(resource, title) {
                     `../backend/${resource}/Index`
                 ),
             meta: {
-                page_title: title + "List ",
+                page_title: title + " List ",
             },
         },
         {
