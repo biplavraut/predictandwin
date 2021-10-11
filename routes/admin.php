@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdsController;
 use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PartnerController;
@@ -25,4 +26,5 @@ Route::middleware('auth:admin')
 
         Route::apiResource('category', CategoryController::class);
         Route::apiResource('partner', PartnerController::class);
+        Route::apiResource('ads', AdsController::class);
     });

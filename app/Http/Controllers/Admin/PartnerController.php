@@ -99,7 +99,7 @@ class PartnerController extends Controller
             ]);
             $slug = Str::slug($request->name);
             if ($request->image) {
-                $image = new ImageCrop('admin', $slug, $request->image);
+                $image = new ImageCrop('partner', $slug, $request->image);
                 $finalImage = $image->resizeCropImage(500, 500);
                 $request->merge(['image' => $finalImage, 'updated_by' => $request->user()->id]);
             } else {
