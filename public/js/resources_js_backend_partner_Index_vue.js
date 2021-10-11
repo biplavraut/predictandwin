@@ -438,7 +438,7 @@ var render = function() {
                               staticClass: "btn btn-sm btn-success",
                               attrs: {
                                 to: {
-                                  name: "admin.edit",
+                                  name: "partner.edit",
                                   params: { id: row.item.id }
                                 }
                               }
@@ -478,7 +478,7 @@ var render = function() {
                   ],
                   null,
                   false,
-                  3997926570
+                  3465306507
                 )
               })
             : _vm._e(),

@@ -8,6 +8,15 @@
             >
             <b-card-body v-if="$gate.isAuthorized()">
                 <b-form  class="forms-sample" @submit.prevent="edit ? updateData() : addData()">
+                    <b-form-group label="Business Name" label-for="inputBusinessName">
+                        <b-form-input 
+                            id="inputBusinessName" 
+                            placeholder="Business Name" 
+                            v-model="form.business_name" 
+                            :class="{ 'is-invalid': form.errors.has('business_name') }" 
+                            trim></b-form-input>
+                        <div v-if="form.errors.has('business_name')" v-html="form.errors.get('business_name')" />
+                    </b-form-group>
                     <b-form-group label="Name" label-for="inputName">
                         <b-form-input 
                             id="inputName" 
@@ -28,32 +37,13 @@
                     </b-form-group>
                     <b-form-group label="Email" label-for="inputEmail">
                         <b-form-input 
+                            type="email"
                             id="inputEmail" 
                             placeholder="Email" 
                             v-model="form.email" 
                             :class="{ 'is-invalid': form.errors.has('email') }" 
                             trim></b-form-input>
                         <div v-if="form.errors.has('email')" v-html="form.errors.get('email')" />
-                    </b-form-group>
-                    <b-form-group label="Password" label-for="inputPassword">
-                        <b-form-input 
-                            type="password"
-                            id="inputPassword" 
-                            placeholder="Password" 
-                            v-model="form.password" 
-                            :class="{ 'is-invalid': form.errors.has('password') }" 
-                            trim></b-form-input>
-                        <div v-if="form.errors.has('password')" v-html="form.errors.get('password')" />
-                    </b-form-group>
-                    <b-form-group label="Confirm Password" label-for="inputConfirmPassword">
-                        <b-form-input 
-                            type="password"
-                            id="inputConfirmPassword" 
-                            placeholder="Confirm Password" 
-                            v-model="form.confirmPassword" 
-                            :class="{ 'is-invalid': form.errors.has('password') }" 
-                            trim></b-form-input>
-                        <div v-if="form.errors.has('password')" v-html="form.errors.get('password')" />
                     </b-form-group>
                     <b-form-group label="Image" label-for="inputImage">
                     <b-form-file
@@ -66,24 +56,7 @@
                         <!-- <b-img :src="form.image" fluid alt="Responsive image"></b-img> -->
                         <div v-if="form.errors.has('image')" v-html="form.errors.get('image')" />
                     </b-form-group>
-                    <b-form-group label="GitHub" label-for="inputGithub">
-                        <b-form-input 
-                            id="inputGithub" 
-                            placeholder="Github" 
-                            v-model="form.github" 
-                            :class="{ 'is-invalid': form.errors.has('github') }" 
-                            trim></b-form-input>
-                        <div v-if="form.errors.has('github')" v-html="form.errors.get('github')" />
-                    </b-form-group>
-                    <b-form-group label="Linkedin" label-for="inputLinkedin">
-                        <b-form-input 
-                            id="inputLinkedin" 
-                            placeholder="Linkedin" 
-                            v-model="form.linkedin" 
-                            :class="{ 'is-invalid': form.errors.has('linkedin') }" 
-                            trim></b-form-input>
-                        <div v-if="form.errors.has('linkedin')" v-html="form.errors.get('linkedin')" />
-                    </b-form-group>
+                    
                     <b-form-group label="Address" label-for="inputAddress">
                         <b-form-input 
                             id="inputAddress" 
@@ -93,18 +66,18 @@
                             trim></b-form-input>
                         <div v-if="form.errors.has('address')" v-html="form.errors.get('address')" />
                     </b-form-group>
-                    <b-form-group label="Bio" label-for="inputBio">                    
+                    <b-form-group label="Excerpt" label-for="inputExcerpt">                    
                         <b-form-textarea
                             id="textarea"
-                            v-model="form.bio"
+                            v-model="form.excerpt"
                             placeholder="Enter short descripton..."
                             rows="4"
                             ></b-form-textarea>
                     </b-form-group>
                     <b-form-group>
                         <b-form-checkbox
-                            v-model="form.display"
-                            :checked="form.display"
+                            v-model="form.enabled"
+                            :checked="form.enabled"
                             >
                             Enabled?
                         </b-form-checkbox>
@@ -132,7 +105,7 @@ export default {
                 email: "",
                 phone: "",
                 image: "",
-                enabled: false,
+                enabled: true,
                 type: "promoter",
                 address: "",
                 excerpt: ""
@@ -160,27 +133,22 @@ export default {
         // Add New Data
         addData() {
             this.$Progress.start(); //start a progress bar
-            if (this.form.password == this.form.confirmPassword) {
-                this.form
-                    .post("/admin/admin") // POST form data
-                    .then(({ data }) => {
-                        this.serverResponse(data);
-                    })
-                    .catch(() => {
-                        swal.fire("Error!", "Something Went Wrong.", "warning");
-                        this.$Progress.fail(); //End the progress bar
-                    });
-            } else {
-                swal.fire("Opps..!", "Passwords does not match", "warning");
-                this.$Progress.fail();
-            }
+            this.form
+                .post("/admin/partner") // POST form data
+                .then(({ data }) => {
+                    this.serverResponse(data);
+                })
+                .catch(() => {
+                    swal.fire("Error!", "Something Went Wrong.", "warning");
+                    this.$Progress.fail(); //End the progress bar
+                });
         },
 
         // Update Data
         updateData(){
             this.$Progress.start();
             this.form
-                .put('/admin/admin/'+this.form.id)
+                .put('/admin/partner/'+this.form.id)
                 .then(({ data }) =>{
                     this.serverResponse(data);
                 }).catch(()=>{
@@ -193,7 +161,7 @@ export default {
             this.$Progress.start(); //start a progress bar
             if (this.$gate.isDevOrAdmin()) {
                 axios
-                    .get("/admin/admin/" + this.$route.params.id)
+                    .get("/admin/partner/" + this.$route.params.id)
                     .then(
                         response => (
                             (this.data = response),
@@ -211,7 +179,11 @@ export default {
             this.loadData();
         }
     },
-    created() {}
+    created() {
+        Fire.$on("AfterCreate",()=>{
+            this.$router.push({ name:"partner.index" });
+        })
+    }
 };
 </script>
 

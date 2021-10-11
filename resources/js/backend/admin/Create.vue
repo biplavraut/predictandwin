@@ -28,6 +28,7 @@
                     </b-form-group>
                     <b-form-group label="Email" label-for="inputEmail">
                         <b-form-input 
+                            type="email"
                             id="inputEmail" 
                             placeholder="Email" 
                             v-model="form.email" 
@@ -103,8 +104,8 @@
                     </b-form-group>
                     <b-form-group>
                         <b-form-checkbox
-                            v-model="form.display"
-                            :checked="form.display"
+                            v-model="form.enabled"
+                            :checked="form.enabled"
                             >
                             Enabled?
                         </b-form-checkbox>
@@ -214,7 +215,11 @@ export default {
             this.loadData();
         }
     },
-    created() {}
+    created() {
+        Fire.$on("AfterCreate",()=>{
+            this.$router.push({ name:"admin.index" });
+        })
+    }
 };
 </script>
 

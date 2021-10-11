@@ -106,9 +106,9 @@ class AdminController extends Controller
             if ($request->image) {
                 $image = new ImageCrop('admin', $slug, $request->image);
                 $finalImage = $image->resizeCropImage(500, 500);
-                $request->merge(['image' => $finalImage]);
+                $request->merge(['image' => $finalImage, 'updated_by' => $request->user()->id]);
             } else {
-                $request->merge(['image' => "no-image.png"]);
+                $request->merge(['image' => "no-image.png", 'updated_by' => $request->user()->id]);
             }
             $user->update($request->all());
             return ['result' => 'success', 'message' => 'Admin user info updated successfully!'];

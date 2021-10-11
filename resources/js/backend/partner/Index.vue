@@ -34,7 +34,7 @@
                 <template #cell(actions)="row">
                     <router-link
                         :to="{
-                            name: 'admin.edit',
+                            name: 'partner.edit',
                             params: { id: row.item.id }
                         }"
                         class="btn btn-sm btn-success"

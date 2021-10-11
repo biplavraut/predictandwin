@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\PartnerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,4 +24,5 @@ Route::middleware('auth:admin')
         Route::get('findAdmin', [App\Http\Controllers\Backend\Admin\AdminController::class, 'search']);
 
         Route::apiResource('category', CategoryController::class);
+        Route::apiResource('partner', PartnerController::class);
     });
