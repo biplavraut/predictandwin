@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helper\ImageCrop;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Admin\PartnerResource;
-use App\Models\Partner;
+use App\Http\Resources\Admin\AdsResource;
+use App\Models\Ads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class PartnerController extends Controller
+class AdsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,9 +19,10 @@ class PartnerController extends Controller
     public function index()
     {
         //
+        //
         if (\Gate::allows('canView')) {
-            $data = Partner::latest()->paginate(10);
-            return PartnerResource::collection($data);
+            $data = Ads::latest()->paginate(10);
+            return AdsResource::collection($data);
         } else {
             return ['result' => 'error', 'message' => 'Unauthorized! Access Denied'];
         }
@@ -35,25 +36,24 @@ class PartnerController extends Controller
      */
     public function store(Request $request)
     {
+
         //
         if (\Gate::allows('canAddUser')) {
             $this->validate($request, [
-                'name' => 'required|string|max:191',
-                'email' => 'required|string|email|max:191|unique:admins',
-                'business_name' => 'required|string'
+                'title' => 'required|string|max:191'
             ]);
-            $slug = Str::slug($request->name);
+            $slug = Str::slug($request->title);
             if ($request->image) {
-                $image = new ImageCrop('partner', $slug, $request->image);
+                $image = new ImageCrop('ads', $slug, $request->image);
                 $finalImage = $image->resizeCropImage(500, 500);
                 $request->merge(['image' => $finalImage]);
             } else {
                 $request->merge(['image' => "no-image.png"]);
             }
             $request->merge(['slug' => $slug, 'created_by' => $request->user()->id, 'updated_by' => $request->user()->id]);
-            $store = Partner::create($request->all());
+            $store = Ads::create($request->all());
             if ($store) {
-                return ['result' => 'success', 'message' => 'Partner added successfully! '];
+                return ['result' => 'success', 'message' => 'Ads added successfully! '];
             } else {
                 return ['result' => 'error', 'message' => 'Something went wrong!'];
             }
@@ -72,8 +72,8 @@ class PartnerController extends Controller
     {
         //
         if (\Gate::allows('canEditUser')) {
-            $data = Partner::findOrFail(decrypt($id));
-            return new PartnerResource($data);
+            $data = Ads::findOrFail(decrypt($id));
+            return new AdsResource($data);
         } else {
             return ['result' => 'error', 'message' => 'Unauthorized! Access Denied'];
         }
@@ -89,24 +89,21 @@ class PartnerController extends Controller
     public function update(Request $request, $id)
     {
         //
-        //
         if (\Gate::allows('canEditUser')) {
-            $user = Partner::findOrFail(decrypt($id));
+            $user = Ads::findOrFail(decrypt($id));
             $this->validate($request, [
-                'name' => 'required|string|max:191',
-                'email' => 'required|string|email|max:191|unique:admins,email,' . $user->id,
-                'business_name' => 'required|string'
+                'title' => 'required|string|max:191'
             ]);
-            $slug = Str::slug($request->name);
+            $slug = Str::slug($request->title);
             if ($request->image) {
-                $image = new ImageCrop('partner', $slug, $request->image);
+                $image = new ImageCrop('ads', $slug, $request->image);
                 $finalImage = $image->resizeCropImage(500, 500);
                 $request->merge(['image' => $finalImage, 'updated_by' => $request->user()->id]);
             } else {
                 $request->merge(['image' => "no-image.png", 'updated_by' => $request->user()->id]);
             }
             $user->update($request->all());
-            return ['result' => 'success', 'message' => 'Partner updated successfully!'];
+            return ['result' => 'success', 'message' => 'Ads updated successfully!'];
         } else {
             return ['result' => 'error', 'message' => 'Unauthorized! Access Denied'];
         }
@@ -120,11 +117,10 @@ class PartnerController extends Controller
      */
     public function destroy($id)
     {
-        //
         if (\Gate::allows('canDeleteUser')) {
-            $data = Partner::findOrFail(decrypt($id));
+            $data = Ads::findOrFail(decrypt($id));
             $data->delete();
-            return ['result' => 'success', 'message' => 'Partner Deleted Successfully'];
+            return ['result' => 'success', 'message' => 'Ads Deleted Successfully'];
         } else {
             return ['result' => 'error', 'message' => 'Unauthorized! Access Denied'];
         }

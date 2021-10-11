@@ -85,6 +85,18 @@
                     <span class="menu-title">Prediction</span></a>
                 </li>
             </router-link>
+            <router-link
+                :to="{name:'ads.index'}"
+                v-slot="{ href, route, navigate, isActive }"
+                custom
+                >
+                <li
+                    :class="isActive ? 'nav-item active':'nav-item'"
+                >
+                    <a :href="href" class="nav-link" @click="navigate" :title="route.fullPath"><i class="ti-announcement menu-icon"></i>
+                    <span class="menu-title">Ads</span></a>
+                </li>
+            </router-link>
         </ul>
     </nav>
 </template>

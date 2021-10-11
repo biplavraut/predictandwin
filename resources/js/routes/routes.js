@@ -89,6 +89,11 @@ export default ({
                     children: resourceUrl("prediction", "Predictions"),
                 },
                 {
+                    path: "ads",
+                    component: Master,
+                    children: resourceUrl("ads", "Ads"),
+                },
+                {
                     path: 'register',
                     name: 'register',
                     meta: { page_title: "Register a User" },
