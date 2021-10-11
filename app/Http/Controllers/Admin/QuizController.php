@@ -133,7 +133,7 @@ class QuizController extends Controller
         for ($i = 0; $i < count($options); $i++) {
             if (is_numeric($options[$i]['value'])) {
                 $is_answer = ($answer == $options[$i]['value']) ? 1 : 0;
-                Option::where('id', $options[$i]['value'])->update(['is_answer' => $is_answer]);
+                Option::where('id', (int)$options[$i]['value'])->update(['is_answer' => $is_answer]);
             } else {
                 $is_answer = ($answer == $options[$i]['value']) ? 1 : 0;
                 Option::create(['title' => $options[$i]['text'], 'quiz_id' => $quiz_id, 'is_answer' => $is_answer]);
