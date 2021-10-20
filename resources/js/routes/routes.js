@@ -7,11 +7,7 @@ function resourceUrl(resource, title) {
     return [{
             path: "list",
             name: resource + ".index",
-            // component: require(`../backend/${resource}/Index`).default,
-            component: () =>
-                import (
-                    `../backend/${resource}/Index`
-                ),
+            component: require(`../backend/${resource}/Index`).default,
             meta: {
                 page_title: title + " List ",
             },
@@ -19,10 +15,7 @@ function resourceUrl(resource, title) {
         {
             path: "create",
             name: resource + ".create",
-            component: () =>
-                import (
-                    `../backend/${resource}/Create`
-                ),
+            component: require(`../backend/${resource}/Create`).default,
             meta: {
                 page_title: `Add a New ${resource}`,
             },

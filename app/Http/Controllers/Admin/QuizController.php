@@ -97,17 +97,20 @@ class QuizController extends Controller
             'title' => 'required|string|max:191',
         ]);
         $data = Quiz::where('id', decrypt($id))->firstOrFail();
+        $options = $request->options;
+        $answer = $request->answer;
         $slug = Str::slug($request->title);
         if (base64_decode($request->image, true)) {
             $image = new ImageCrop('quiz', $slug, $request->image);
             $finalImage = $image->resizeCropImage(500, 500);
             $request->merge(['slug' => $slug, 'image' => $finalImage, 'updated_by' => auth('admin')->user()->id]);
-            $update = $data->update($request->all());
+            $update = $data->update($request->except(['options', 'answer']));
         } else {
             $request->merge(['updated_by' => auth('admin')->user()->id]);
-            $update = $data->update($request->except(['image']));
+            $update = $data->update($request->except(['image', 'options', 'answer']));
         }
         if ($update) {
+            $this->addOpton($data->id, $options, $request->answer);
             return ['result' => 'success', 'message' => 'Quiz updated successfully! '];
         } else {
             return ['result' => 'error', 'message' => 'Something went wrong!'];

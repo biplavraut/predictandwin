@@ -20,6 +20,7 @@ class QuizResource extends JsonResource
             'slug'  => $this->slug,
             'options' => $this->option()->select('title as text', 'id as value')->get(),
             'answer' => $this->option()->where('is_answer', 1)->pluck('id')->first(),
+            'answers' => $this->option()->where('is_answer', 1)->pluck('title')->first(),
             'category_id' => $this->category_id,
             'category' => $this->category()->pluck('title')->first(),
             'partner_id' => $this->partner_id,

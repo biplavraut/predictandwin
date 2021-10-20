@@ -2,15 +2,19 @@
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
             <router-link
-                :to="{name:'dashboard'}"
-                v-slot="{ href, route, navigate, isActive }"
-                custom
+                :to="navItem.url"
+                custom v-slot="{ href, route, navigate, isExactActive  }"
+                v-for="(navItem, key) in navItems"
+                :key="key"
                 >
                 <li
-                    :class="isActive ? 'nav-item active':'nav-item'"
+                    :class="{
+                        'nav-item': true,
+                        active: isActive(navItem.url.name)
+                    }"
                 >
-                    <a :href="href" class="nav-link" @click="navigate" :title="route.fullPath"><i class="ti-home menu-icon"></i>
-                    <span class="menu-title">Dashboard</span></a>
+                    <a :href="href" class="nav-link" @click="navigate" :title="route.fullPath"><i :class="navItem.icon +' menu-icon'"></i>
+                    <span class="menu-title">{{ navItem.title }}</span></a>
                 </li>
             </router-link>
             <!-- <router-link
@@ -25,54 +29,7 @@
                     <span class="menu-title">Setting</span></a>
                 </li>
             </router-link> -->
-            <router-link
-                :to="{name:'admin.index'}"
-                v-slot="{ href, route, navigate, isActive }"
-                custom
-                >
-                <li
-                    :class="isActive ? 'nav-item active':'nav-item'"
-                >
-                    <a :href="href" class="nav-link" @click="navigate" :title="route.fullPath"><i class="ti-user menu-icon"></i>
-                    <span class="menu-title">Admin</span></a>
-                </li>
-            </router-link>
-            <router-link
-                :to="{name:'category.index'}"
-                v-slot="{ href, route, navigate, isActive }"
-                custom
-                >
-                <li
-                    :class="isActive ? 'nav-item active':'nav-item'"
-                >
-                    <a :href="href" class="nav-link" @click="navigate" :title="route.fullPath"><i class="ti-view-list menu-icon"></i>
-                    <span class="menu-title">Category</span></a>
-                </li>
-            </router-link>
-            <router-link
-                :to="{name:'partner.index'}"
-                v-slot="{ href, route, navigate, isActive }"
-                custom
-                >
-                <li
-                    :class="isActive ? 'nav-item active':'nav-item'"
-                >
-                    <a :href="href" class="nav-link" @click="navigate" :title="route.fullPath"><i class="ti-crown menu-icon"></i>
-                    <span class="menu-title">Partner</span></a>
-                </li>
-            </router-link>
-            <router-link
-                :to="{name:'quiz.index'}"
-                v-slot="{ href, route, navigate, isActive }"
-                custom
-                >
-                <li
-                    :class="isActive ? 'nav-item active':'nav-item'"
-                >
-                    <a :href="href" class="nav-link" @click="navigate" :title="route.fullPath"><i class="ti-pulse menu-icon"></i>
-                    <span class="menu-title">Predict an Win</span></a>
-                </li>
-            </router-link>
+            
             <!-- <router-link
                 :to="{name:'prediction.index'}"
                 v-slot="{ href, route, navigate, isActive }"
@@ -85,23 +42,58 @@
                     <span class="menu-title">Prediction</span></a>
                 </li>
             </router-link> -->
-            <router-link
-                :to="{name:'ads.index'}"
-                v-slot="{ href, route, navigate, isActive }"
-                custom
-                >
-                <li
-                    :class="isActive ? 'nav-item active':'nav-item'"
-                >
-                    <a :href="href" class="nav-link" @click="navigate" :title="route.fullPath"><i class="ti-announcement menu-icon"></i>
-                    <span class="menu-title">Ads</span></a>
-                </li>
-            </router-link>
         </ul>
     </nav>
 </template>
 <script>
 export default {
-    
+    data() {
+        return {
+            navItems: [
+                {
+                    title: "Dashboard",
+                    icon: "ti-home",
+                    url: { name: "dashboard" },
+                    children: [],
+                },
+                {
+                    title: "Admin User",
+                    icon: "ti-user",
+                    url: { name: "admin.index" },
+                    children: [],
+                },
+                {
+                    title: "Category",
+                    icon: "ti-view-list",
+                    url: { name: "category.index" },
+                    children: [],
+                },
+                {
+                    title: "Partner",
+                    icon: "ti-crown",
+                    url: { name: "partner.index" },
+                    children: [],
+                },
+                {
+                    title: "Predict and Win",
+                    icon: "ti-pulse",
+                    url: { name: "quiz.index" },
+                    children: [],
+                },
+                {
+                    title: "Custom Ads",
+                    icon: "ti-announcement",
+                    url: { name: "ads.index" },
+                    children: [],
+                },
+            ],
+        }        
+    },
+    methods: {
+        isActive(url) {
+        if (this.$route.name !== null) return this.$route.name.includes(url);
+            return false;
+        },
+    },
 }
 </script>

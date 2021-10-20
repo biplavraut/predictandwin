@@ -36,8 +36,11 @@
                     {{ row.item.point }} | <b>{{ row.item.premium_point }}</b> 
                 </template>
                 <template #cell(active_at)="row">
-                    From: <b>{{ row.start_at | myDayDate }}</b> <br>
-                    To: <b>{{ row.end_at | myDayDate }}</b>
+                    From: <b>{{ row.item.start_at | myDayDate }}</b> <br>
+                    To: <b>{{ row.item.end_at | myDayDate }}</b>
+                </template>
+                <template #cell(answer)="row">
+                    <span class="blurry-text unselectable">{{ row.item.answers }}</span>
                 </template>
                 <template #cell(actions)="row">
                     <router-link
@@ -79,7 +82,7 @@ export default {
     data() {
         return {
             totalData: 0,
-            fields: ['images','title','category','status','points','active_at','excerpt','actions'],
+            fields: ['images','title','category','status','points','active_at','answer','actions'],
             data: { data: []},
             form: new Form({
                 id: ""
@@ -162,5 +165,21 @@ export default {
 .nav-pills {
     border-bottom: none;
     padding-bottom: none;
+}
+.blurry-text {
+   color: transparent;
+   text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.blurry-text:hover {
+   color: #71c016;
+   text-shadow: none;
 }
 </style>
