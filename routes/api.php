@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdsController;
 use App\Http\Controllers\Api\PartnerController;
 use App\Http\Controllers\Api\QuizController;
 use App\Http\Controllers\Api\CategoryController;
@@ -32,7 +33,7 @@ Route::middleware('auth:sanctum')
         Route::get('category', [CategoryController::class, 'index']);
         Route::get('partner', [PartnerController::class, 'index']);
         Route::get('quiz', [QuizController::class, 'index']);
-
+        Route::get('ads', [AdsController::class, 'index']);
         // User
         Route::get('profile', [ProfileController::class, 'index']);
         Route::get('logout', [LoginController::class, 'logout']);
