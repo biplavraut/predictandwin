@@ -4,30 +4,30 @@ export default class Gate {
     }
 
     isDev() {
-        return window.user.type === 'dev';
+        return user.type === 'dev';
     }
     isSupAdmin() {
-        return window.user.type === 'supadmin';
+        return user.type === 'supadmin';
     }
     isAdmin() {
-        return window.user.type === 'admin';
+        return user.type === 'admin';
     }
     isUser() {
-        return window.user.type === 'user';
+        return user.type === 'user';
     }
     isDevOrAdmin() {
-        if (window.user.type === 'supdev' || window.user.type === 'dev' || window.user.type === 'supadmin' || window.user.type === 'admin') {
+        if (user.type === 'supdev' || user.type === 'dev' || user.type === 'supadmin' || user.type === 'admin') {
             return true;
         }
     }
     isAuthorized() {
-        if (window.user.type === 'supdev' || window.user.type === 'dev' || window.user.type === 'supadmin' || window.user.type === 'admin' || window.user.type === 'editor') {
+        if (user.type === 'supdev' || user.type === 'dev' || user.type === 'supadmin' || user.type === 'admin' || user.type === 'editor') {
             return true;
         }
     }
 
     isSupDevOrDev() {
-        if (window.user.type === 'supdev' || window.user.type === 'dev') {
+        if (user.type === 'supdev' || user.type === 'dev') {
             return true;
         }
 

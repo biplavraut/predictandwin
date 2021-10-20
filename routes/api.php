@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\PartnerController;
+use App\Http\Controllers\Api\QuizController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\ProfileController;
@@ -26,7 +28,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::middleware('auth:sanctum')
     ->group(function () {
+        // App Data
         Route::get('category', [CategoryController::class, 'index']);
+        Route::get('partner', [PartnerController::class, 'index']);
+        Route::get('quiz', [QuizController::class, 'index']);
+
+        // User
         Route::get('profile', [ProfileController::class, 'index']);
         Route::get('logout', [LoginController::class, 'logout']);
     });

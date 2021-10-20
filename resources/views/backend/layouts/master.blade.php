@@ -21,15 +21,11 @@
         window.user = @json(auth('admin')->user());
     </script>
   @else
-  <script>
-    localStorage.removeItem("token")
-    window.location.href.indexOf("login") > -1 ? '': location.href = "/backend/login"
-  </script>
+    <script>
+      localStorage.removeItem("token")
+      window.location.href.indexOf("login") > -1 ? '': location.href = "/backend/login"
+    </script>
   @endif
-  
-        {{-- if (!window.user) {
-            location.href = "/backend/login";
-        } --}}
   <!-- base js -->
   <script src="{{asset('js/app.js')}}"></script>
 </body>
