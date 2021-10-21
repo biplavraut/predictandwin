@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')
         Route::get('quiz/{categoryId}', [QuizController::class, 'categoryQuiz']);
         Route::get('quiz', [QuizController::class, 'index']);
         Route::get('ads', [AdsController::class, 'index']);
+        Route::post('answer', [QuizController::class, 'answer']);
         // User
         Route::get('profile', [ProfileController::class, 'index']);
         Route::get('logout', [LoginController::class, 'logout']);
