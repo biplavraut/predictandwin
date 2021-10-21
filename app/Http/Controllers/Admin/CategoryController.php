@@ -90,7 +90,7 @@ class CategoryController extends Controller
         ]);
         $category = Category::where('id', decrypt($id))->firstOrFail();
         $slug = Str::slug($request->title);
-        if (base64_decode($request->image, true)) {
+        if ($request->image) {
             $image = new ImageCrop('category', $slug, $request->image);
             $finalImage = $image->resizeCropImage(500, 500);
             $request->merge(['slug' => $slug, 'image' => $finalImage, 'updated_by' => auth('admin')->user()->id]);

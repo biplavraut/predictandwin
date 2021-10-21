@@ -236,13 +236,17 @@ export default {
                 });
         },
         addOption(){
-            const alphabet = "abcdefghijklmnopqrstuvwxyz"
-            const value = alphabet[Math.floor(Math.random() * alphabet.length)]
-            if(this.oForm.is_answer){
-                this.form.answer = value;
-            }
-            this.form.options.push({text: this.oForm.title, value: value})
-            this.oForm.reset();
+            if(this.oForm.title){
+                const alphabet = "abcdefghijklmnopqrstuvwxyz"
+                const value = alphabet[Math.floor(Math.random() * alphabet.length)]
+                if(this.oForm.is_answer){
+                    this.form.answer = value;
+                }
+                this.form.options.push({text: this.oForm.title, value: value})
+                this.oForm.reset();
+            }else{
+                alert('Option title required.')
+            }            
         },
 
         /*==== Start of Show existing User function ====*/
