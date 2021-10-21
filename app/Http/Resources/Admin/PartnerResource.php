@@ -25,7 +25,7 @@ class PartnerResource extends JsonResource
             'image' => $this->image == 'no-image.png' ? asset('storage/' . $this->image) : asset('storage/images/partner/' . $this->slug . '/' . $this->image),
             'address' => $this->address,
             'excerpt' => $this->excerpt,
-            'created_at' => $this->created_at
+            'createdAt' => $this->created_at
         ];
     }
 }

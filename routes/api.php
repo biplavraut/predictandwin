@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')
         // App Data
         Route::get('category', [CategoryController::class, 'index']);
         Route::get('partner', [PartnerController::class, 'index']);
+        Route::get('quiz/{categoryId}', [QuizController::class, 'categoryQuiz']);
         Route::get('quiz', [QuizController::class, 'index']);
         Route::get('ads', [AdsController::class, 'index']);
         // User

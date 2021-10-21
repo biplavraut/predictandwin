@@ -91,8 +91,9 @@ export default {
     },
     methods: {
         isActive(url) {
-        if (this.$route.name !== null) return this.$route.name.includes(url);
-            return false;
+            return this.$route.name.includes(url);
+        // if (this.$route.name !== null) return this.$route.name.includes(url);
+        //     return false;
         },
     },
 }

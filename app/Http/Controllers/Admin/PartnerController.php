@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helper\ImageCrop;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Admin\PartnerResource;
 use App\Models\Partner;
-use Illuminate\Http\Request;
+use App\Helper\ImageCrop;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\Admin\PartnerResource;
 
 class PartnerController extends Controller
 {
@@ -121,7 +122,7 @@ class PartnerController extends Controller
     public function destroy($id)
     {
         //
-        if (\Gate::allows('canDeleteUser')) {
+        if (Gate::allows('canDeleteUser')) {
             $data = Partner::findOrFail(decrypt($id));
             $data->delete();
             return ['result' => 'success', 'message' => 'Partner Deleted Successfully'];

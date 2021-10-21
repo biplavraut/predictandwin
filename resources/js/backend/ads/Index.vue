@@ -29,7 +29,7 @@
                         <b-img :src="row.item.image" fluid alt="Responsive image"></b-img>
                 </template>
                 <template #cell(created_at)="row">
-                    <i>{{ row.created_at | myDate }}</i>
+                    <i>{{ row.item.created_at | myDate }}</i>
                 </template>
                 <template #cell(actions)="row">
                     <router-link

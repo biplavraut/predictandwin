@@ -17,7 +17,7 @@
                                 placeholder="Email"
                                 v-model="form.email"
                             />
-                            <p class="text-danger" v-text="errors.email"></p>
+                            <div class="text-danger" v-if="form.errors.has('email')" v-html="form.errors.get('email')" />
                         </div>
                         <div class="form-group">
                             <input
@@ -27,7 +27,7 @@
                                 placeholder="Password"
                                 v-model="form.password"
                             />
-                            <p class="text-danger" v-text="errors.password"></p>
+                            <div class="text-danger" v-if="form.errors.has('password')" v-html="form.errors.get('password')" />
                         </div>
                         <div class="mt-3">
                             <a
@@ -67,7 +67,8 @@ export default {
                             axios.get('/admin/user').then((response) => {
                                 window.user = response.data
                                 localStorage.setItem("token", response.data.token);
-                                this.$router.push("dashboard");
+                                location.href = "/backend"
+                                // this.$router.push("dashboard");
                                 // console.log(window.user);
                             }).catch(errors => {
                                 localStorage.removeItem("token")

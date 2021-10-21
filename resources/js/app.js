@@ -7,7 +7,7 @@ require("/assets/plugins/perfect-scrollbar/perfect-scrollbar.css");
 require("/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js");
 require("/assets/js/off-canvas.js");
 require("/assets/js/hoverable-collapse.js");
-require("/assets/js/misc.js");
+// require("/assets/js/misc.js");
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import Vue from 'vue';

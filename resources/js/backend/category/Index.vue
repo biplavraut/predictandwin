@@ -29,7 +29,7 @@
                         <b-img :src="row.item.image" fluid alt="Responsive image"></b-img>
                 </template>
                 <template #cell(created_at)="row">
-                    <i>{{ row.created_at | myDate }}</i>
+                    <i>{{ row.item.created_at | myDate }}</i>
                 </template>
                 <template #cell(actions)="row">
                     <router-link
@@ -71,7 +71,7 @@ export default {
     data() {
         return {
             totalData: 0,
-            fields: ['images','title','slug','display','featured','excerpt','created_at','actions'],
+            fields: ['images','title','slug','display','featured','excerpt','createdAt','actions'],
             data: { data: []},
             form: new Form({
                 id: ""

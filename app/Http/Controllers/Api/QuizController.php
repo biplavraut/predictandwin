@@ -17,6 +17,13 @@ class QuizController extends Controller
         return QuizResource::collection($data);
     }
 
+    public function categoryQuiz(Request $request)
+    {
+        # code...
+        $data = Quiz::where([['display', 1], ['category_id', decrypt($request->categoryId)]])->latest()->paginate(10);
+        return QuizResource::collection($data);
+    }
+
     // public function takeQuiz()
     // {
     // }
