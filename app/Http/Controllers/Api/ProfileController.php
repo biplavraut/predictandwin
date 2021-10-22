@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helper\ImageCrop;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\UserRequest;
 use App\Http\Resources\Api\UserResource;
 use App\Models\User;
 use Dotenv\Exception\ValidationException;
@@ -59,24 +60,35 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
         $user = $request->user();
-        $request->merge(['updated_by' => $request->user()->id]);
-        $this->validate($request, [
-            'name' => 'required|string|max:191',
-            'email' => 'required|string|email|max:191|unique:users,email,' . $user->id,
-        ]);
         if ($request->image) {
-            $image = new ImageCrop('admin', $user->slug, $request->image);
+            $image = new ImageCrop('user', $user->slug, $request->image);
             $finalImage = $image->resizeCropImage(500, 500);
-            $request->merge(['image' => $finalImage]);
+            $request->merge(['image' => $finalImage, 'dob' => date('Y-m-d H:i:s', strtotime($request->dob))]);
         } else {
-            $request->merge(['image' => "no-image.png"]);
+            $request->merge(['image' => "no-image.png", 'dob' => date('Y-m-d H:i:s', strtotime($request->dob))]);
         }
-        $user->update($request->all());
-        return ['result' => 'success', 'message' => 'Profile info updated'];
+        $updateProfile = $user->update($request->all());
+
+        if ($updateProfile) {
+            $data = [
+                'user' => new UserResource($user),
+            ];
+            return response()->json([
+                'result' => 'success',
+                'message' => 'Profile info Updated',
+                'data' => $data
+            ]);
+        } else {
+            return response()->json([
+                'result' => 'error',
+                'message' => 'Something went wrong!',
+                'data' => ''
+            ]);
+        }
     }
 
     /**

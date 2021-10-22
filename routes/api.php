@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')
         Route::post('answer', [QuizController::class, 'answer']);
         // User
         Route::get('profile', [ProfileController::class, 'index']);
+        Route::post('profile', [ProfileController::class, 'update']);
         Route::post('forget-password', [ProfileController::class, 'forgetPassword']);
         Route::get('logout', [LoginController::class, 'logout']);
     });
