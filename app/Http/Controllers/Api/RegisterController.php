@@ -25,7 +25,7 @@ class RegisterController extends Controller
         $request->merge(['slug' => $slug, 'password' => Hash::make($request->password)]);
         $store = User::create($request->all());
         $data = [
-            'user' => new UserResource($store),
+            'user' => new UserResource(User::where('id', $store->id)->first()),
             'token' => $store->createToken($request->deviceToken)->plainTextToken
         ];
         if ($store) {
