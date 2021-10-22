@@ -16,12 +16,21 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('phone')->unique();
             $table->string('password');
             $table->string('image')->nullable()->default('no-image.png');
             $table->tinyInteger('enabled')->default(0);
+            $table->enum('type', ['guest', 'normal', 'premium'])->default('guest');
+            $table->string('played')->nullable()->default(0);
+            $table->string('solved')->nullable()->default(0);
+            $table->string('point')->nullable()->default(0);
+            $table->string('rank')->nullable()->default(0);
+            $table->dateTime('dob')->nullable();
+            $table->text('address')->nullable();
+            $table->string('device_token')->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helper\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\UserRegisterRequest;
+use App\Http\Resources\Api\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,22 +14,32 @@ use Illuminate\Support\Str;
 class RegisterController extends Controller
 {
     //
-    public function register(Request $request)
+    public function register(UserRegisterRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|string|max:191',
-            'email' => 'nullable|string|email|max:191|unique:users',
-            'phone' => 'required|string|max:10|min:10',
-            'password' => 'required|string|min:6',
-            'confirm_password' => 'required|string|min:6'
-        ]);
-        $slug = Str::slug($request->name);
-        $request->merge(['password' => Hash::make($request->password)]);
+        $slug = Str::slug($request->name) . '-paw-' . time();
+        $path = public_path() . '/storage/images/user/' . $slug;
+        if (!file_exists($path)) {
+            \File::makeDirectory($path, $mode = 0777, true, true);
+            \File::makeDirectory($path . '/thumbs', $mode = 0777, true, true);
+        }
+        $request->merge(['slug' => $slug, 'password' => Hash::make($request->password)]);
         $store = User::create($request->all());
+        $data = [
+            'user' => new UserResource($store),
+            'token' => $store->createToken($request->deviceToken)->plainTextToken
+        ];
         if ($store) {
-            return ['result' => 'success', 'message' => 'Welcome! to Predict and Win. '];
+            return response()->json([
+                'result' => 'success',
+                'message' => 'Welcome! to Predict and Win.',
+                'data' => $data
+            ]);
         } else {
-            return ['result' => 'error', 'message' => 'Something went wrong!'];
+            return response()->json([
+                'result' => 'error',
+                'message' => 'Something went wrong!',
+                'data' => ''
+            ]);
         }
     }
 }

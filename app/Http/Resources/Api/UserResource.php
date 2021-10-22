@@ -20,9 +20,10 @@ class UserResource extends JsonResource
             'name'  => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
-            'rank' => 100,
-            'points' => 200,
-            'solved' => 50,
+            'image' => $this->image == 'no-image.png' ? asset('storage/' . $this->image) : asset('storage/images/user/' . $this->slug . '/' . $this->image),
+            'rank' => $this->rank ?? 0,
+            'point' => $this->point ?? 0,
+            'solved' => $this->solved ?? 0,
             'createdAt' => date_format($this->created_at, "F j, Y, g:i a")
         ];
     }

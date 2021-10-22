@@ -18,7 +18,7 @@ class LoginController extends Controller
         $request->validate([
             'username' => 'required',
             'password' => 'required',
-            'device_name' => 'required',
+            'deviceToken' => 'required',
         ]);
 
         $user = User::where('phone', $request->username)->first();
@@ -30,10 +30,21 @@ class LoginController extends Controller
             throw ValidationException::withMessages([
                 'username' => ['The provided credentials are incorrect.'],
             ]);
+            // return response()->json([
+            //     'result' => 'error',
+            //     'message' => 'Something went wrong!',
+            //     'data' => ''
+            // ]);
         }
-        return response()->json([
+        $user->update(['device_token' => $request->deviceToken]);
+        $data = [
             'user' => new UserResource($user),
-            'token' => $user->createToken($request->device_name)->plainTextToken
+            'token' => $user->createToken($request->deviceToken)->plainTextToken
+        ];
+        return response()->json([
+            'result' => 'success',
+            'message' => 'Welcome! to Predict and Win.',
+            'data' => $data
         ]);
     }
     // Expire Token
